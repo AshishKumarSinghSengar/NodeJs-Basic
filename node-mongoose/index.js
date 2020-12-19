@@ -12,8 +12,30 @@ connect.then((db)=>{
         name:'Uthappizza',
         description: 'test'
     })
-    .then((dishes)=>{
+    .then((dish)=>{
         console.log(dishes);
+
+        return Dishes.findByIdAndUpdate(dish._id, {
+            $set : { description : 'Updated test'}
+        },
+            {
+                new: true 
+        }).exec();
+    })
+    .then((dish)=>{
+        console.log(dish);
+
+        dish.comments.push({
+            rating: 5,
+            comment : 'I \'m getting a sinking feeling!',
+            author : 'Ashish Sengar'
+        });
+
+        return dish.save();
+    })
+    .then((dish)=>{
+
+        console.log(dish);
 
         return Dishes.remove({});
     })
@@ -22,5 +44,5 @@ connect.then((db)=>{
     })
     .catch((err) => {
         console.log(err);
-    })
+    });
 });
